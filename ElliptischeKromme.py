@@ -6,7 +6,7 @@ class ElliptischeKromme(object):
             raise Exception('De kromme y^2 = x^3 + {} * x + {} is niet glad.'.format(a, b))
     
     def isNonSingular(self):
-        return 4 * self.a * self.a * self.a + 27 * self.b * self.b != 0
+        return 4*self.a*self.a*self.a + 27*self.b*self.b != 0
         
     def __str__(self):
         return 'y^2 = x^3 + {} * x + {}'.format(self.a,self.b)
@@ -15,7 +15,7 @@ class ElliptischeKromme(object):
         return self.a == other.a and self.b == other.b
         
     def testPunt(self, x, y):
-        return y * y == x * x * x + self.a * x + self.b
+        return y*y == x*x*x + self.a*x + self.b
             
 class Punt(object):
     def __init__(self, x, y, kromme = ElliptischeKromme()):
@@ -45,17 +45,23 @@ class Punt(object):
             return self
         #L(x) = ax + b
         if self.x != other.x:
-            a = (other.y - self.y) / (other.x - self.x)
+            a = (other.y - self.y)/(other.x - self.x)
         elif self.y == -other.y:
             return NulPunt(self.kromme)
         else:
-            a = (3 * self.x * self.x + self.kromme.a) / (2 * self.y)
-        x = a * a -  other.x - self.x
-        y = a * (x - self.x) + self.y
+            a = (3*self.x*self.x + self.kromme.a)/(2*self.y)
+        x = a*a -  other.x - self.x
+        y = a*(x - self.x) + self.y
         return Punt(x, -y, self.kromme)
         
     def __sub__(self, other):
         return self + (-other)
+        
+    def __rmul__(self, n):
+        ans = self
+        for i in range(1, n):
+            ans += self
+        return ans
         
         
 class NulPunt(Punt):
