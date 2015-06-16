@@ -8,7 +8,7 @@ class ElliptischeKromme(object):
     def isNonSingular(self):
         return 4*self.a*self.a*self.a + 27*self.b*self.b != 0
         
-    def __str__(self):
+    def __repr__(self):
         return 'y^2 = x^3 + {} * x + {}'.format(self.a,self.b)
         
     def __eq__(self, other):
@@ -25,7 +25,7 @@ class Punt(object):
         if not kromme.testPunt(x, y):
             raise Exception('Het punt ({}, {}) ligt niet op de kromme {}'.format(x, y, kromme))
             
-    def __str__(self):
+    def __repr__(self):
         return '({}, {})'.format(self.x, self.y)
     
     def __neg__(self):
@@ -59,7 +59,7 @@ class Punt(object):
         
     def __rmul__(self, n):
         ans = self
-        for i in range(1, n):
+        for i in range(1, int(n)):
             ans += self
         return ans
         
@@ -68,7 +68,7 @@ class NulPunt(Punt):
     def __init__(self, kromme = ElliptischeKromme()):
         self.kromme = kromme
     
-    def __str__(self):
+    def __repr__(self):
         return 'NulPunt'
         
     def __eq__(self, other):
