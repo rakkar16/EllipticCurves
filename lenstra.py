@@ -5,12 +5,6 @@ import random
 def find_factor(N, max_iter = 10, max_factorial = 10): #zoek redelijke standaardwaarden
     factor = None
     
-    """def eval_gcd(v, N, n):
-        nonlocal factor
-        if v not in [1, N]:
-            factor = n"""
-
-    
     class MonitorMod(modulo.IntModP(N)):
         def inverse(self):
             def eea(r0, r1, s0 = 1, s1 = 0, t0 = 0, t1 = 1):
@@ -29,7 +23,6 @@ def find_factor(N, max_iter = 10, max_factorial = 10): #zoek redelijke standaard
                     return eea(r0, r1, s0, s1, t0, t1)
                     
             v, x, _ = eea(self.p, self.n)
-            #eval_gcd(v, N, self.n)
             nonlocal factor
             if v not in [1, N]:
                 factor = v

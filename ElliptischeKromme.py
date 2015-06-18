@@ -9,13 +9,14 @@ class ElliptischeKromme(object):
         return 4*self.a*self.a*self.a + 27*self.b*self.b != 0
         
     def __repr__(self):
-        return 'y^2 = x^3 + {} * x + {}'.format(self.a,self.b)
+        return 'y^2 = x^3 + {} * x + {}'.format(self.a, self.b)
         
     def __eq__(self, other):
         return self.a == other.a and self.b == other.b
         
     def testPunt(self, x, y):
         return y*y == x*x*x + self.a*x + self.b
+
             
 class Punt(object):
     def __init__(self, x, y, kromme = ElliptischeKromme()):
