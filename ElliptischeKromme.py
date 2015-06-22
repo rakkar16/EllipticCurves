@@ -57,13 +57,40 @@ class Punt(object):
         
     def __sub__(self, other):
         return self + (-other)
-        
+    
     def __rmul__(self, n):
+        nbin = bin(n)[:1:-1]
+        P = self
+        Q = NulPunt(self.kromme)
+        for i in nbin:
+            if i == '1':
+                Q += P
+            P = P + P
+        return Q
+
+""" een naieve implementatie van scalaire multiplicatie
+
+    def naivemul(self, n):
         ans = self
         for i in range(1, int(n)):
             ans += self
         return ans
+"""
+
+""" een recursieve double-and-add implementatie (schendt maximale recursiediepte)
         
+    def daarecmul(self, n):
+        def f(P, m):
+            if m == 0:
+                return NulPunt(P.kromme)
+            elif m == 1:
+                return P
+            elif m % 2 == 1:
+                return P + f(P, m - 1)
+            else:
+                return f(P + P, n / 2)
+        return f(self, n)
+"""
         
 class NulPunt(Punt):
     def __init__(self, kromme = ElliptischeKromme()):
