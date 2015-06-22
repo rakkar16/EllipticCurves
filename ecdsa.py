@@ -3,22 +3,6 @@ import ElliptischeKromme as EK
 import modulo
 import random
 
-"""
-def stringtobin(string):
-    return '0b' + ''.join(map(lambda l: bin(ord(l))[2:], string))
-"""
-
-"""
-def find_order(P):
-    C = P.kromme
-    n = 1
-    product = P
-    while product != EK.NulPunt(C):
-        product += P
-        n += 1
-    return n
-""" 
-
 def pad_binary(binnum, length):
     extrazeroes = length + 2 - len(binnum)
     return '0b' + ''.join('0' * extrazeroes) + binnum[2:]
