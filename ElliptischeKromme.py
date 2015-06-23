@@ -1,11 +1,12 @@
 class ElliptischeKromme(object):
+    """Een elliptische kromme y^2 = x^3 + ax + b."""
     def __init__(self, a = -1, b = 1):
         self.a = a
         self.b = b
-        if not self.isNonSingular():
+        if not self._isNonSingular():
             raise Exception('De kromme y^2 = x^3 + {} * x + {} is niet glad.'.format(a, b))
     
-    def isNonSingular(self):
+    def _isNonSingular(self):
         return 4*self.a*self.a*self.a + 27*self.b*self.b != 0
         
     def __repr__(self):
@@ -15,10 +16,15 @@ class ElliptischeKromme(object):
         return self.a == other.a and self.b == other.b
         
     def testPunt(self, x, y):
+        """Geef True als (x, y) op de kromme ligt, anders False."""
         return y*y == x*x*x + self.a*x + self.b
 
             
 class Punt(object):
+    """Een punt (x, y) op een elliptische kromme y^2 = x^3 + ax + b.
+    
+    Optellen en negatie is gedefiniëerd, alsook scalaire vermenigvuldiging.
+    """
     def __init__(self, x, y, kromme = ElliptischeKromme()):
         self.x = x
         self.y = y
@@ -50,7 +56,7 @@ class Punt(object):
         elif self.y == -other.y:
             return NulPunt(self.kromme)
         else:
-            a = (3*self.x*self.x + self.kromme.a)/(2*self.y)
+            a = (3*self.x*self.x + self.kromme.a)/(2*self.y) # a opgeteld bij zichzelf
         x = a*a -  other.x - self.x
         y = a*(x - self.x) + self.y
         return Punt(x, -y, self.kromme)
@@ -59,6 +65,10 @@ class Punt(object):
         return self + (-other)
     
     def __rmul__(self, n):
+        """Vermenigvuldig een punt met een integer n.
+        
+        Gebruikt het double-and-add algoritme.
+        """ 
         nbin = bin(n)[:1:-1]
         P = self
         Q = NulPunt(self.kromme)
@@ -93,6 +103,7 @@ class Punt(object):
 """
         
 class NulPunt(Punt):
+    """Het punt oneindig op een elliptische kromme, dat als nulpunt dient."""
     def __init__(self, kromme = ElliptischeKromme()):
         self.kromme = kromme
     
