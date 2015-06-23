@@ -3,12 +3,18 @@ import ElliptischeKromme as EK
 import modulo
 import random
 
+
 def pad_binary(binnum, length):
+    """Geef binair getal binnum gerepresenteerd in length bits.
+    
+    Als binnum meer dan length bits heeft, is de output weer binnum.
+    """
     extrazeroes = length + 2 - len(binnum)
     return '0b' + ''.join('0' * extrazeroes) + binnum[2:]
     
     
 def binary_hash(message, hashmethod):
+    """Hash message met hashmethod, geef de output als binair getal."""
     hash_ = hashmethod()
     hash_.update(message)
     hexhash = hash_.hexdigest()
@@ -17,6 +23,14 @@ def binary_hash(message, hashmethod):
     
     
 def generate_key(curve, G, n):
+    """Genereer privésleutel d (integer) en publieke sleutel Q (punt op curve).
+    
+    curve is een elliptische kromme.
+    G is een punt op deze kromme met orde n
+    Q = d*G
+    Het NIST heeft een lijst geschikte krommen en basispunten beschikbaar 
+    als onderdeel van de DSS.
+    """
     if G.kromme != curve:
         raise Exception('Punt {} ligt niet op kromme {}'.format(G, curve))
     if n * G != EK.NulPunt(curve):
@@ -28,6 +42,14 @@ def generate_key(curve, G, n):
     
     
 def sign_message(message, curve, G, n, dA, hashmethod=hashlib.sha256):
+    """Geef een signature r, s voor message, met privésleutel dA.
+    
+    curve is een elliptische kromme.
+    G is een basispunt op deze kromme met orde n
+    curve en G (en dus ook n) moeten dezelfde zijn als bij het genereren van dA.
+    hashmethod is de gebruikte hashmethode, deze moet compatibel zijn 
+    met hashlib.
+    """
     if G.kromme != curve:
         raise Exception('Punt {} ligt niet op kromme {}'.format(G, curve))
     if n * G != EK.NulPunt(curve):
@@ -35,7 +57,7 @@ def sign_message(message, curve, G, n, dA, hashmethod=hashlib.sha256):
     modn = modulo.IntModP(n)
     e = binary_hash(message, hashmethod)
     Ln = n.bit_length()
-    z = e[:Ln + 2]
+    z = e[:Ln + 2] #z is de eerste Ln bits van e, dus z heeft evenveel bits als n
     randgen = random.SystemRandom()
     r = 0
     s = 0
@@ -47,7 +69,14 @@ def sign_message(message, curve, G, n, dA, hashmethod=hashlib.sha256):
     return r, s
     
     
-def check_signature(message, curve, G, n, dA, QA, r, s, hashmethod=hashlib.sha256):
+def check_signature(message, curve, G, n, QA, r, s, hashmethod=hashlib.sha256):
+    """Controleer signature r, s, behorende bij bericht message en sleutel QA.
+    
+    curve, G, n geven de kromme en het basispunt waarop deze signature 
+    is gedefiniëerd, deze moeten overeengekomen zijn met de verzender.
+    hashmethod is de gebruikte hashmethode, deze moet compatibel zijn met 
+    hashlib en overeen komen met de methode die de verzender heeft gebruikt.
+    """
     if G.kromme != curve:
         raise Exception('Punt {} ligt niet op kromme {}'.format(G, curve))
     if n * G != EK.NulPunt(curve):
