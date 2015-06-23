@@ -1,5 +1,11 @@
 def IntModP(p):
+    """Maak een class voor de gehele getallen modulo p.
+    
+    Als p niet priem is, kunnen deling en inverse verkeerde resultaten geven."""
     class IntegerModP(object):
+        """Een geheel getal in een restklasse modulo een zeker getal.
+        
+        Dit getal is te vinden als IntegerModP.p"""
         def __init__(self, n):
             self.n = n % p
         
@@ -41,7 +47,9 @@ def IntModP(p):
             return '{} (mod {})'.format(self.n, self.p)
             
         def inverse(self):
+            """Geef een getal n zo dat self*n = 1 (mod p)."""
             def eea(r0, r1, s0 = 1, s1 = 0, t0 = 0, t1 = 1):
+                """Geef de grootste gemene deler van r0 en r1, en ook getallen s, t zo dat ggd(r0, r1) = s*r0 + t*r1"""
                 q, r = divmod(r0, r1)
                 r0 = r1
                 r1 = r
