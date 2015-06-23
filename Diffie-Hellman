@@ -39,4 +39,5 @@ print('De openbare sleutels zijn %s, %s' % (deelSleutel_1, deelSleutel_2))
 
 gedeeldGeheim_1 = ontvangDH(deelSleutel_2, priveSleutel_1)
 gedeeldGeheim_2 = ontvangDH(deelSleutel_1, priveSleutel_2)
+
 print('Gedeeld geheim is %s == %s' % (gedeeldGeheim_1, gedeeldGeheim_2))
