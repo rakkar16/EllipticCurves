@@ -7,17 +7,17 @@ def IntModP(p):
             return int(self.n)
         
         def __add__(self, other):
-            return IntegerModP(int(self) + int(other))
+            return self._new(int(self) + int(other))
         
         def __radd__(self, other): return self + other
         
         def __sub__(self, other):
-            return IntegerModP(int(self) - int(other))
+            return self._new(int(self) - int(other))
             
         def __rsub__(self, other): return other + (-self)
             
         def __mul__(self, other):
-            return IntegerModP(int(self) * int(other))
+            return self._new(int(self) * int(other))
         
         def __rmul__(self, other): return self * other
         
@@ -28,14 +28,14 @@ def IntModP(p):
             return self * other.inverse()
         
         def __neg__(self):
-            return IntegerModP(-self.n)
+            return self._new(-self.n)
             
         def __eq__(self, other):
-            return isinstance(other, IntegerModP) and self.n == other.n
+            return type(other) == type(self) and self.n == other.n
             
         def __divmod__(self, other):
             q, r = divmod(self.n, other.n)
-            return (IntegerModP(q), IntegerModP(r))
+            return (self._new(q), self._new(r))
         
         def __repr__(self):
             return '{} (mod {})'.format(self.n, self.p)
@@ -57,8 +57,11 @@ def IntModP(p):
                     return eea(r0, r1, s0, s1, t0, t1)
                     
             _, x, _ = eea(self.p, self.n)
-            return IntegerModP(x)
+            return self._new(x)
             
+        @classmethod
+        def _new(cls, *args, **kwargs):
+            return cls(*args, **kwargs)
             
     IntegerModP.p = p
     IntegerModP.__name__ = 'Z/{}'.format(p)
