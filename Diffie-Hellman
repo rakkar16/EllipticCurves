@@ -1,0 +1,42 @@
+from ElliptischeKromme import *
+from modulo import *
+import os
+
+
+#Willekeurige geheime sleutels
+def generateSecretKey(numBits):
+   return int.from_bytes(os.urandom(numBits // 8), byteorder='big')
+
+#Vul geheime sleutel in
+def stuurDH(priveSleutel, generator):
+    return priveSleutel * generator
+
+#Vul gedeelde sleutel en geheime sleutel in
+def ontvangDH(deelSleutel, priveSleutel):
+    return priveSleutel * deelSleutel
+
+# Moet een priemgetal zijn
+F = IntModP(4703) 
+
+#Openbare kromme en basispunt
+curve = ElliptischeKromme(a = F(-1), b = F(1))
+basePoint = Punt(F(1), F(1), curve)
+
+print(curve)
+print(basePoint)
+
+    
+priveSleutel_1 = generateSecretKey(8)
+priveSleutel_2 = generateSecretKey(8)
+
+print('De geheime sleutels zijn %d, %d' % (priveSleutel_1, priveSleutel_2))
+
+
+deelSleutel_1 = stuurDH(priveSleutel_1, basePoint)
+deelSleutel_2 = stuurDH(priveSleutel_2, basePoint)
+
+print('De openbare sleutels zijn %s, %s' % (deelSleutel_1, deelSleutel_2))
+
+gedeeldGeheim_1 = ontvangDH(deelSleutel_2, priveSleutel_1)
+gedeeldGeheim_2 = ontvangDH(deelSleutel_1, priveSleutel_2)
+print('Gedeeld geheim is %s == %s' % (gedeeldGeheim_1, gedeeldGeheim_2))
