@@ -1,40 +1,42 @@
-# DH basis, stuurFunctie en ontvangFunctie moeten network transition functions zijn
-def stuurDH(priveSleutel, generator, stuurFunctie):
-    return stuurFunctie(priveSleutel * generator)
-
-def ontvangDH(priveSleutel, ontvangFunctie):
-    return priveSleutel * ontvangFunctie()
-
-
-#DH test
 from ElliptischeKromme import *
-# TODO: importeer eindige lichamen
-
+from modulo import *
 import os
 
-# sleutel gegenereerd met als input gewenst aantal bytes
-def genereerSleutel(numBits):
-    return int.from_bytes(os.urandom(numBits // 8), byteorder='big')
 
-if __name__ == "__main__":
-   F = FiniteField(3851, 1)
+#Willekeurige geheime sleutels
+def generateSecretKey(numBits):
+   return int.from_bytes(os.urandom(numBits // 8), byteorder='big')
 
-   # Testkromme: y^2 = x^3 + 324x + 1287
-   curve = ElliptischeKromme(a=F(324), b=F(1287))
+#Vul geheime sleutel in
+def stuurDH(priveSleutel, generator):
+    return priveSleutel * generator
 
-   # order is 1964
-   basePoint = Point(curve, F(920), F(303))
+#Vul gedeelde sleutel en geheime sleutel in
+def ontvangDH(deelSleutel, priveSleutel):
+    return priveSleutel * deelSleutel
 
-   aliceSecretKey = generateSecretKey(8)
-   bobSecretKey = generateSecretKey(8)
+# Moet een priemgetal zijn
+F = IntModP(4703) 
 
-   print('Secret keys are %d, %d' % (aliceSecretKey, bobSecretKey))
+#Openbare kromme en basispunt
+curve = ElliptischeKromme(a = F(-1), b = F(1))
+basePoint = Punt(F(1), F(1), curve)
 
-   alicePublicKey = sendDH(aliceSecretKey, basePoint, lambda x:x)
-   bobPublicKey = sendDH(bobSecretKey, basePoint, lambda x:x)
+print(curve)
+print(basePoint)
 
-   sharedSecret1 = receiveDH(bobSecretKey, lambda: alicePublicKey)
-   sharedSecret2 = receiveDH(aliceSecretKey, lambda: bobPublicKey)
-   print('Shared secret is %s == %s' % (sharedSecret1, sharedSecret2))
+    
+priveSleutel_1 = generateSecretKey(8)
+priveSleutel_2 = generateSecretKey(8)
 
-   print('extracing x-coordinate to get an integer shared secret: %d' % (sharedSecret1.x.n))
+print('De geheime sleutels zijn %d, %d' % (priveSleutel_1, priveSleutel_2))
+
+
+deelSleutel_1 = stuurDH(priveSleutel_1, basePoint)
+deelSleutel_2 = stuurDH(priveSleutel_2, basePoint)
+
+print('De openbare sleutels zijn %s, %s' % (deelSleutel_1, deelSleutel_2))
+
+gedeeldGeheim_1 = ontvangDH(deelSleutel_2, priveSleutel_1)
+gedeeldGeheim_2 = ontvangDH(deelSleutel_1, priveSleutel_2)
+print('Gedeeld geheim is %s == %s' % (gedeeldGeheim_1, gedeeldGeheim_2))
