@@ -1,0 +1,56 @@
+\documentclass{article}
+\usepackage[dutch]{babel}
+
+%\usepackage{graphicx} % support the \includegraphics command and options
+%\usepackage{booktabs} % for much better looking tables
+%\usepackage{array} % for better arrays (eg matrices) in maths
+%\usepackage{paralist} % very flexible & customisable lists (eg. enumerate/itemize, etc.)
+\usepackage{verbatim} % adds environment for commenting out blocks of text & for better verbatim
+%\usepackage{subfig} % make it possible to include more than one captioned figure/table in a single float
+% These packages are all incorporated in the memoir class to one degree or another...
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+
+\title{Brief Article}
+\author{The Author}
+%\date{} % Activate to display a given date or no date (if empty),
+         % otherwise the current date is printed 
+
+\begin{document}
+\maketitle
+
+\section{Het algoritme van Lenstra}
+
+\subsection{Introductie}
+
+Het algoritme van Lenstra is een factorizatiealgoritme dat gebruik maakt van elliptische krommen. Het is ontwikkeld door Hendrik Lenstra. Voor algemene doeleinden is het het op twee na snelst bekende algoritme, en het is vooral geschikt voor het vinden van kleine factoren.
+
+\subsection{Werking}
+
+Het algoritme voor factorizatie van een getal $n$ is als volgt:
+
+\begin{enumerate}
+
+	\item Kies een willekeurige kromme over $\mathbb{Z}/n\mathbb{Z}$ en een niet-triviaal punt $P$ op deze kromme.
+
+	\item Bereken $eP$ waarbij $e$ het product van meerdere kleine getallen is. Wij gebruiken $e = m!$ voor een zekere $m$, waarbij we dit \'e\'en factor per keer uitrekenen. Dat wil zeggen, we rekenen  eerst $2P$ uit, dan $3(2P)$, enzovoort. Bij het 		uitrekenen van deze producten moeten punten op de kromme worden opgeteld. Bij het optellen van zulke punten moeten de co\"odinaten door elkaar worden gedeeld. En bij het delen van modulogetallen wordt gebruik gemaakt van het algoritme van Euclides, waar dan ook de grootste gemene deler van twee getallen uitkomt.
+
+	Het uitgebreide algoritme van Euclides, uitgevoerd op $a$ en $b$, geeft namelijk drie getallen. Als eerste de grootste gemene deler ggd$(a, b)$ van $a$ en $b$, en daarnaast nog twee getallen $s$ en $t$ z\'o dat gcd$(a, b) = s a + t b$. Om een getal $a$ 	dus modulo een priemgetal $p$ te inverteren, kunnen we dit algoritme dus gebruiken. ggd$(a, p)$ is immers gelijk aan $1$, mits $a < p$, omdat $p$ geen andere delers heeft dan zichzelf en $1$. Dus ggd$(a, p) = sa + tp$ oftewel $sa + tp \equiv 1 \pmod{p}$ 
+oftewel $sa \equiv 1 \pmod{p}$ oftewel $s \equiv a^{-1} \pmod{p}$.
+
+	In dit geval onthouden we echter niet alleen $s$, maar ook de grootste gemene deler zelf, omdat we die nog nodig hebben.
+
+	\item 
+	\begin{itemize}
+		\item Als we op gegeven moment een ggd$(v, n) \neq 1$ tegenkomen voor een zekere $v$, dan is hebben we een deler gevonden. Immers, ggd$(a, b) \vert b$ voor alle $a$.
+		\item Als we op gegeven moment hebben $kP = \infty$ voor een zekere $k$, dan beginnen we opnieuw.
+		\item Als we geen delers vinden, beginnen we opnieuw.
+	\end{itemize}
+\end{enumerate}
+
+We moeten bepalen hoe vaak we dit willen proberen, er is namelijk geen garantie dat een factor bestaat. Immers, $n$ kan een priemgetal zijn.
+
+
+
+\end{document}
