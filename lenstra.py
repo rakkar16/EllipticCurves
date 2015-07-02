@@ -74,3 +74,20 @@ def find_factor(N, max_iter = 10, max_factorial = 10): #zoek redelijke standaard
             return ans
             
     return None
+
+def find_factors(N):
+    """Recursieve functie om alle factoren van N te vinden via de find_factor functie."""
+    factors = []
+    total = N
+    if not find_factor(N):
+        return factors
+    else:
+        while find_factor(total):
+            while find_factor(N):
+                N = find_factor(N)
+            factors.append(N)
+            total = int(total/N)
+            N = total
+        factors.append(total)
+        factors.sort()
+        return factors
