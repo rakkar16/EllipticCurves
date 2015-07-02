@@ -3,22 +3,22 @@ from modulo import *
 import os
 
 
-#Willekeurige geheime sleutels
+"""Willekeurige geheime sleutels."""
 def generateSecretKey(numBits):
    return int.from_bytes(os.urandom(numBits // 8), byteorder='big')
 
-#Vul geheime sleutel in
+"""Berekent openbare sleutels."""
 def stuurDH(priveSleutel, generator):
     return priveSleutel * generator
 
-#Vul gedeelde sleutel en geheime sleutel in
+"""Berekent geheime sleutel."""
 def ontvangDH(deelSleutel, priveSleutel):
     return priveSleutel * deelSleutel
 
-# Moet een priemgetal zijn
+"""Moet een priemgetal zijn."""
 F = IntModP(4703) 
 
-#Openbare kromme en basispunt
+"""Openbare kromme en basispunt"""
 curve = ElliptischeKromme(a = F(-1), b = F(1))
 basePoint = Punt(F(1), F(1), curve)
 
